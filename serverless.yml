@@ -16,5 +16,17 @@ functions:
           path: /activity-type
           method: GET
           cors: true # Cross Origin Resource Sharing
+      - http:
+          path: /activity
+          method: GET
+          cors: true # Cross Origin Resource Sharing
+      - http:
+          path: /activity/{id} # id is a Path Parameter
+          method: PUT
+          cors: true   
+      - http:
+          path: /activity 
+          method: POST
+          cors: true       
    
 
