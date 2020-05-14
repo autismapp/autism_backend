@@ -55,13 +55,21 @@ app.put('/activity/:id', (request, response) => {
 
 app.post('/activity/', (request, response) => {
   const data = request.body;
-  connection.query(`INSERT INTO activity (user_id, activity_type_id, completed) VALUES (1, ${data.activity_type_id}, 0)`, (err) => {
+  connection.query(`INSERT INTO activity (user_id, activity_type_id, completed) VALUES (1, ${data.activity_type_id}, 0)`, (err, results) => {
     if (err) {
       response.status(500).send(err);
     } else {
-      response
-        .status(200)
-        .send(`Created new activity`);
+      connection.query(
+        `SELECT * FROM activity WHERE activity_id = ${results.insertId}`,
+        (error, res) => {
+          if (err) {
+            console.log('Error from MySQL', error);
+            response.status(500).send(err);
+          } else {
+            response.status(201).send(res[0]);
+          }
+        }
+      );
     }
   });
 });
