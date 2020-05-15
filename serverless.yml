@@ -27,6 +27,14 @@ functions:
       - http:
           path: /activity 
           method: POST
+          cors: true 
+      - http:
+          path: /activity/{id}
+          method: DELETE
+          cors: true 
+      - http:
+          path: /feeling 
+          method: GET
           cors: true       
-   
+         
 
