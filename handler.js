@@ -79,7 +79,6 @@ app.post('/activity/', (request, response) => {
 app.delete('/activity/:id', (request, response)=>{
   const id = request.params.id;
   const data = request.body;
-
   connection.query(`DELETE FROM activity WHERE activity_id = ${id}`, (err)=>{
     if (err) {
       console.log('Error from MySql', err);
@@ -88,8 +87,6 @@ app.delete('/activity/:id', (request, response)=>{
       response.status(200).send(`Deleted activity with ID: ${id}`)
     }
   })
-
-
 });
 
 
