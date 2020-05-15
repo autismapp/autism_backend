@@ -60,7 +60,7 @@ app.post('/activity/', (request, response) => {
       response.status(500).send(err);
     } else {
       connection.query(
-        `SELECT * FROM activity WHERE activity_id = ${results.insertId}`,
+        `SELECT a.*, at.image_url FROM activity a INNER JOIN activity_type at ON a.activity_type_id = at.activity_type_id WHERE a.activity_id = ${results.insertId}`,
         (error, res) => {
           if (err) {
             console.log('Error from MySQL', error);
