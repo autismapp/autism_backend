@@ -38,9 +38,6 @@ app.get('/activity', (request, response) => {
 app.put('/activity/:id', (request, response) => {
   const id = request.params.id;
   const data = request.body;
-  // Write an SQL query to update the fields provided in the request for the task WHERE TaskId = id
-  // Remember to escape user-provided values
-  // Send back 200 (not the updated task)
   connection.query(`UPDATE activity SET Completed = ${data.completed} WHERE activity_id = ${id}`, (err) => {
     if (err) {
       console.log('Error from MySql', err);
@@ -52,7 +49,19 @@ app.put('/activity/:id', (request, response) => {
     }
   });
 });
-
+app.delete('/activity/:id', (request, response) => {
+  const id = request.params.id;
+  connection.query(`DELETE FROM activity WHERE activity_id = ${id}`, (err) => {
+    if (err) {
+      console.log('Error from MySql', err);
+      response.status(500).send(err);
+    } else {
+      response
+        .status(200)
+        .send(`Deleted actvity with ID ${id}`);
+    }
+  });
+});
 app.post('/activity/', (request, response) => {
   const data = request.body;
   connection.query(`INSERT INTO activity (user_id, activity_type_id, completed) VALUES (1, ${data.activity_type_id}, 0)`, (err, results) => {
@@ -60,7 +69,7 @@ app.post('/activity/', (request, response) => {
       response.status(500).send(err);
     } else {
       connection.query(
-        `SELECT * FROM activity WHERE activity_id = ${results.insertId}`,
+        `SELECT a.*, at.image_url FROM activity a INNER JOIN activity_type at ON a.activity_type_id = at.activity_type_id WHERE a.activity_id = ${results.insertId}`,
         (error, res) => {
           if (err) {
             console.log('Error from MySQL', error);
